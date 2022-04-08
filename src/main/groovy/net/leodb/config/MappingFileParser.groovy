@@ -23,14 +23,14 @@ class MappingFileParser {
         this.templateEngine = new SimpleTemplateEngine();
         this.envMap = new HashMap()
 
-        populateDefaultAndLocalYaml(defaultYamlFile, envMap)
+        populateDataYaml(defaultYamlFile, envMap)
 
-        envMap.putAll(new Yaml().load(this.envFile.getText()))
+        populateDataYaml(envFile, envMap)
 
-        populateDefaultAndLocalYaml(localFile, envMap)
+        populateDataYaml(localFile, envMap)
     }
 
-    private static void populateDefaultAndLocalYaml(File file, Map envMap) {
+    private static void populateDataYaml(File file, Map envMap) {
         if (file != null && file.exists()) {
             final String fileContent = file.getText().trim()
 
@@ -53,11 +53,10 @@ class MappingFileParser {
     }
 
     void handleMapping(String key, Object value) {
-        if (key.startsWith("templates/")) {
+        if (value instanceof String) {
             parseTemplate(key, value, false)
-        } else {
-            final List listValues = value
-            listValues.each {listVal -> parseTemplate(listVal, key, true)}
+        } else if(value instanceof List){
+            value.each {listVal -> parseTemplate(listVal, key, true)}
         }
     }
 
