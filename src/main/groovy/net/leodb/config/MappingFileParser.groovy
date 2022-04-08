@@ -1,5 +1,5 @@
 //file:noinspection GroovyAssignabilityCheck
-package net.leodb.dynamodb
+package net.leodb.config
 
 import groovy.text.SimpleTemplateEngine
 import org.apache.commons.lang3.StringUtils

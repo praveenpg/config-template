@@ -1,5 +1,6 @@
-package net.leodb.dynamodb;
+package net.leodb.config;
 
+import net.leodb.config.MappingFileParser;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
