@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Mojo(name = "generateConfig", defaultPhase = LifecyclePhase.COMPILE)
-public class ConfigTemplateMojoV2 extends AbstractMojo {
+public class ConfigTemplateMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
 
