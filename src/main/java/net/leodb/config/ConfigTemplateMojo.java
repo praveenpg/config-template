@@ -1,6 +1,5 @@
 package net.leodb.config;
 
-import net.leodb.config.MappingFileParser;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Mojo(name = "generateConfig", defaultPhase = LifecyclePhase.COMPILE)
+@Mojo(name = "generateConfig", defaultPhase = LifecyclePhase.PACKAGE)
 public class ConfigTemplateMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
