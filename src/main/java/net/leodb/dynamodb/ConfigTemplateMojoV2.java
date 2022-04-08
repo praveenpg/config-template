@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Mojo(name = "generateConfig", defaultPhase = LifecyclePhase.COMPILE)
 public class ConfigTemplateMojoV2 extends AbstractMojo {
@@ -24,12 +25,12 @@ public class ConfigTemplateMojoV2 extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         final File baseDir = project.getBasedir();
         final List<File> mappingYamls = Arrays.stream(Objects.requireNonNull(baseDir.listFiles()))
-                .filter(file -> (file.getName().equals("mapping.yaml") || file.getName().equals("mapping.yml"))).toList();
+                .filter(file -> (file.getName().equals("mapping.yaml") || file.getName().equals("mapping.yml"))).collect(Collectors.toList());
         final File dataDir = Arrays.stream(Objects.requireNonNull(baseDir.listFiles())).filter(file -> file.getName().equals("data")).findFirst().orElseThrow(() -> new IllegalStateException("no data directory found"));
         final List<File> envYamlFiles = Arrays.stream(Objects.requireNonNull(dataDir.listFiles()))
-                .filter(file -> (file.getName().equals(env + ".yaml") || file.getName().equals(env + ".yml"))).toList();
+                .filter(file -> (file.getName().equals(env + ".yaml") || file.getName().equals(env + ".yml"))).collect(Collectors.toList());
         final List<File> localYamlFiles = Arrays.stream(Objects.requireNonNull(dataDir.listFiles()))
-                .filter(file -> (file.getName().equals("local.yaml") || file.getName().equals("local.yml"))).toList();
+                .filter(file -> (file.getName().equals("local.yaml") || file.getName().equals("local.yml"))).collect(Collectors.toList());
         final File mappingYaml;
         final File envYamlFile;
         final File localYamlFile;
@@ -45,7 +46,7 @@ public class ConfigTemplateMojoV2 extends AbstractMojo {
         if(envYamlFiles.size() == 0) {
             throw new IllegalStateException("No env yaml file found");
         } else if(envYamlFiles.size() > 1) {
-            throw new IllegalStateException("Multiple %s yaml files found".formatted(env));
+            throw new IllegalStateException(String.format("Multiple %s yaml files found", env));
         }
 
         if(localYamlFiles.size() == 0) {
