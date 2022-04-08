@@ -1,3 +1,4 @@
+//file:noinspection GroovyAssignabilityCheck
 package net.leodb.dynamodb
 
 import groovy.text.SimpleTemplateEngine
@@ -14,22 +15,30 @@ class MappingFileParser {
     private final Map envMap;
     private final SimpleTemplateEngine templateEngine
 
-    MappingFileParser(File baseDirectory, File mappingYaml, File envFile, File localFile, Log log) {
+    MappingFileParser(File baseDirectory, File mappingYaml, File envFile, File localFile, File defaultYamlFile, Log log) {
         this.baseDirectory = baseDirectory
         this.mappingYaml = mappingYaml
         this.log = log;
         this.envFile = envFile
         this.templateEngine = new SimpleTemplateEngine();
-        this.envMap = new HashMap<>(new Yaml().load(this.envFile.getText()))
+        this.envMap = new HashMap()
 
-        if(localFile != null && localFile.exists()) {
-            final String localFileContent = localFile.getText().trim()
+        populateDefaultAndLocalYaml(defaultYamlFile, envMap)
 
-            if(!StringUtils.isEmpty(localFileContent)) {
-                Map localMap = new HashMap<>(new Yaml().load(localFileContent))
+        envMap.putAll(new Yaml().load(this.envFile.getText()))
 
-                if (localMap != null && !localMap.isEmpty()) {
-                    this.envMap.putAll(localMap)
+        populateDefaultAndLocalYaml(localFile, envMap)
+    }
+
+    private static void populateDefaultAndLocalYaml(File file, Map envMap) {
+        if (file != null && file.exists()) {
+            final String fileContent = file.getText().trim()
+
+            if (!StringUtils.isEmpty(fileContent)) {
+                Map map = new HashMap<>(new Yaml().load(fileContent))
+
+                if (map != null && !map.isEmpty()) {
+                    envMap.putAll(map)
                 }
             }
         }

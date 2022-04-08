@@ -31,9 +31,12 @@ public class ConfigTemplateMojo extends AbstractMojo {
                 .filter(file -> (file.getName().equals(env + ".yaml") || file.getName().equals(env + ".yml"))).collect(Collectors.toList());
         final List<File> localYamlFiles = Arrays.stream(Objects.requireNonNull(dataDir.listFiles()))
                 .filter(file -> (file.getName().equals("local.yaml") || file.getName().equals("local.yml"))).collect(Collectors.toList());
+        final List<File> defaultYamlFiles = Arrays.stream(Objects.requireNonNull(dataDir.listFiles()))
+                .filter(file -> (file.getName().equals("default.yaml") || file.getName().equals("default.yml"))).collect(Collectors.toList());
         final File mappingYaml;
         final File envYamlFile;
         final File localYamlFile;
+        final File defaultYamlFile;
 
         getLog().info("Env = " + env);
 
@@ -57,9 +60,17 @@ public class ConfigTemplateMojo extends AbstractMojo {
             localYamlFile = localYamlFiles.get(0);
         }
 
+        if(defaultYamlFiles.size() == 0) {
+            defaultYamlFile = null;
+        } else if(defaultYamlFiles.size() > 1) {
+            throw new IllegalStateException("More than one local yaml files found");
+        } else {
+            defaultYamlFile = localYamlFiles.get(0);
+        }
+
         envYamlFile = envYamlFiles.get(0);
 
         mappingYaml = mappingYamls.get(0);
-        new MappingFileParser(baseDir, mappingYaml, envYamlFile, localYamlFile, getLog()).generateConfigs();
+        new MappingFileParser(baseDir, mappingYaml, envYamlFile, localYamlFile, defaultYamlFile, getLog()).generateConfigs();
     }
 }
