@@ -40,19 +40,22 @@ public class ConfigTemplateMojo extends AbstractMojo {
 
         getLog().info("Env = " + env);
 
+        getLog().info("Parsing mapping");
         if(mappingYamls.size() == 0) {
             throw new IllegalStateException("No mapping yaml file found");
         } else if(mappingYamls.size() > 1) {
             throw new IllegalStateException("Multiple mapping yaml files found");
         }
 
+        getLog().debug("Parsing envYamlFiles");
         if(envYamlFiles.size() == 0) {
             throw new IllegalStateException("No env yaml file found");
         } else if(envYamlFiles.size() > 1) {
             throw new IllegalStateException(String.format("Multiple %s yaml files found", env));
         }
 
-        if(localYamlFiles.size() == 0) {
+        getLog().debug("Parsing localYamlFiles");
+        if(localYamlFiles == null || localYamlFiles.size() == 0) {
             localYamlFile = null;
         } else if(localYamlFiles.size() > 1) {
             throw new IllegalStateException("More than one local yaml files found");
@@ -60,13 +63,19 @@ public class ConfigTemplateMojo extends AbstractMojo {
             localYamlFile = localYamlFiles.get(0);
         }
 
-        if(defaultYamlFiles.size() == 0) {
+        getLog().debug("Parsing defaultYamlFiles");
+        if(defaultYamlFiles == null || defaultYamlFiles.size() == 0) {
+            getLog().debug("Parsing defaultYamlFiles - 1");
             defaultYamlFile = null;
         } else if(defaultYamlFiles.size() > 1) {
+            getLog().debug("Parsing defaultYamlFiles - 2");
             throw new IllegalStateException("More than one local yaml files found");
         } else {
-            defaultYamlFile = localYamlFiles.get(0);
+            getLog().debug("Parsing defaultYamlFiles - 3");
+            defaultYamlFile = defaultYamlFiles.get(0);
         }
+
+        getLog().info("Completed data yamls");
 
         envYamlFile = envYamlFiles.get(0);
 

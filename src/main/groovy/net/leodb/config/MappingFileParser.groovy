@@ -23,10 +23,13 @@ class MappingFileParser {
         this.templateEngine = new SimpleTemplateEngine();
         this.envMap = new HashMap()
 
+        log.debug("populating default")
         populateDataYaml(defaultYamlFile, envMap)
 
+        log.debug("populating env")
         populateDataYaml(envFile, envMap)
 
+        log.debug("populating local")
         populateDataYaml(localFile, envMap)
     }
 
