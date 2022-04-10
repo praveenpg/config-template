@@ -64,7 +64,7 @@ class MappingFileParser {
     }
 
     private void parseTemplate(String key, String value, boolean appendContent) {
-        File templateFile = new File(key);
+        File templateFile = new File(baseDirectory.getPath() + "/" + key);
         String finalDestPath = baseDirectory.getPath() + "/" + (String) value;
         String finalDestPathDirPath = finalDestPath.substring(0, finalDestPath.lastIndexOf("/"));
         File finalDestPathDirPathDir = new File(finalDestPathDirPath)
