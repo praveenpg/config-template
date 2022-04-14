@@ -80,6 +80,7 @@ class MappingFileParser {
 
         if (!destFile.exists()) {
             destFile.createNewFile();
+            destFile.write("")
         } else {
             if (!appendContent) {
                 clearDestFile(destFile)
