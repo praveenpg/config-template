@@ -79,8 +79,11 @@ class MappingFileParser {
         File destFile = new File(finalDestPath)
 
         if (!destFile.exists()) {
-            destFile.createNewFile();
-            destFile.write("")
+            destFile.createNewFile()
+            destFile.append("")
+            parseTemplate(key, value, appendContent)
+
+            return
         } else {
             if (!appendContent) {
                 clearDestFile(destFile)
@@ -102,6 +105,6 @@ class MappingFileParser {
     private static void clearDestFile(File destFile) {
         destFile.delete();
         destFile.createNewFile();
-        destFile.write("")
+        destFile.append("")
     }
 }
