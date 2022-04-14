@@ -102,5 +102,6 @@ class MappingFileParser {
     private static void clearDestFile(File destFile) {
         destFile.delete();
         destFile.createNewFile();
+        destFile.write("")
     }
 }
