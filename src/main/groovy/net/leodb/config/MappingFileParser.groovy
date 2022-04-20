@@ -14,26 +14,28 @@ class MappingFileParser {
     private final File envFile
     private final Map envMap;
     private final SimpleTemplateEngine templateEngine
+    String buildEnv
 
-    MappingFileParser(File baseDirectory, File mappingYaml, File envFile, File localFile, File defaultYamlFile, Log log) {
+    MappingFileParser(File baseDirectory, File mappingYaml, File envFile, File localFile, File defaultYamlFile, Log log, String buildEnv) {
         this.baseDirectory = baseDirectory
         this.mappingYaml = mappingYaml
         this.log = log;
         this.envFile = envFile
         this.templateEngine = new SimpleTemplateEngine();
         this.envMap = new HashMap()
+        this.buildEnv = buildEnv;
 
         log.debug("populating default")
-        populateDataYaml(defaultYamlFile, envMap)
+        populateDataYaml(defaultYamlFile, envMap, buildEnv)
 
         log.debug("populating env")
-        populateDataYaml(envFile, envMap)
+        populateDataYaml(envFile, envMap, buildEnv)
 
         log.debug("populating local")
-        populateDataYaml(localFile, envMap)
+        populateDataYaml(localFile, envMap, "dev")
     }
 
-    private static void populateDataYaml(File file, Map envMap) {
+    private static void populateDataYaml(File file, Map envMap, String buildEnv) {
         if (file != null && file.exists()) {
             final String fileContent = file.getText().trim()
 
@@ -55,6 +57,14 @@ class MappingFileParser {
         keys.each { key -> handleMapping(key, map.get(key)) }
     }
 
+    private String getReplacedValue(String key) {
+        SimpleTemplateEngine templateEngine = new SimpleTemplateEngine()
+
+        String value = templateEngine.createTemplate(key).make(Map.of("build.env", buildEnv))
+
+        return value;
+    }
+
     void handleMapping(String key, Object value) {
         if (value instanceof String) {
             parseTemplate(key, value, false)
@@ -65,8 +75,8 @@ class MappingFileParser {
     }
 
     private void parseTemplate(String key, String value, boolean appendContent) {
-        File templateFile = new File(baseDirectory.getPath() + "/" + key);
-        String finalDestPath = baseDirectory.getPath() + "/" + (String) value;
+        File templateFile = new File(baseDirectory.getPath() + "/" + getReplacedValue(key));
+        String finalDestPath = baseDirectory.getPath() + "/" + getReplacedValue((String) value);
         String finalDestPathDirPath = finalDestPath.substring(0, finalDestPath.lastIndexOf("/"));
         File finalDestPathDirPathDir = new File(finalDestPathDirPath)
 

@@ -80,6 +80,6 @@ public class ConfigTemplateMojo extends AbstractMojo {
         envYamlFile = envYamlFiles.get(0);
 
         mappingYaml = mappingYamls.get(0);
-        new MappingFileParser(baseDir, mappingYaml, envYamlFile, localYamlFile, defaultYamlFile, getLog()).generateConfigs();
+        new MappingFileParser(baseDir, mappingYaml, envYamlFile, localYamlFile, defaultYamlFile, getLog(), env).generateConfigs();
     }
 }
