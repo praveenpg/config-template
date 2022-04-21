@@ -59,8 +59,11 @@ class MappingFileParser {
 
     private String getReplacedValue(String key) {
         SimpleTemplateEngine templateEngine = new SimpleTemplateEngine()
+        final HashMap map = new HashMap()
 
-        String value = templateEngine.createTemplate(key).make(Map.of("build.env", buildEnv))
+        map.put("env", buildEnv)
+
+        String value = templateEngine.createTemplate(key).make(map)
 
         return value;
     }
@@ -75,7 +78,9 @@ class MappingFileParser {
     }
 
     private void parseTemplate(String key, String value, boolean appendContent) {
-        File templateFile = new File(baseDirectory.getPath() + "/" + getReplacedValue(key));
+        String baseDirectoryPath = baseDirectory.getPath() + "/" + getReplacedValue(key);
+        log.info("Base Directory Path: " + baseDirectoryPath)
+        File templateFile = new File(baseDirectoryPath);
         String finalDestPath = baseDirectory.getPath() + "/" + getReplacedValue((String) value);
         String finalDestPathDirPath = finalDestPath.substring(0, finalDestPath.lastIndexOf("/"));
         File finalDestPathDirPathDir = new File(finalDestPathDirPath)
