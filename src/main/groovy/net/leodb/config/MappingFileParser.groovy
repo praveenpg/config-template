@@ -72,20 +72,20 @@ class MappingFileParser {
         if (value instanceof String) {
             parseTemplate(key, value, false)
         } else if(value instanceof List){
-            log.info("List: " + value)
+            log.debug("List: " + value)
             value.each {listVal -> parseTemplate(listVal, key, true)}
         }
     }
 
     private void parseTemplate(String key, String value, boolean appendContent) {
         String baseDirectoryPath = baseDirectory.getPath() + "/" + getReplacedValue(key);
-        log.info("Base Directory Path: " + baseDirectoryPath)
+        log.debug("Base Directory Path: " + baseDirectoryPath)
         File templateFile = new File(baseDirectoryPath);
         String finalDestPath = baseDirectory.getPath() + "/" + getReplacedValue((String) value);
         String finalDestPathDirPath = finalDestPath.substring(0, finalDestPath.lastIndexOf("/"));
         File finalDestPathDirPathDir = new File(finalDestPathDirPath)
 
-        log.info("template file: " + templateFile)
+        log.debug("template file: " + templateFile)
 
         if (!finalDestPathDirPathDir.exists()) {
             finalDestPathDirPathDir.mkdirs();
@@ -112,7 +112,7 @@ class MappingFileParser {
         }
         String templateText = templateEngine.createTemplate(templateFile.getText()).make(envMap);
 
-        log.info("template text: " + templateText)
+        log.debug("template text: " + templateText)
 
         destFile.append(templateText)
     }
