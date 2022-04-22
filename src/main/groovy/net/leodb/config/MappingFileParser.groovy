@@ -72,7 +72,7 @@ class MappingFileParser {
         if (value instanceof String) {
             parseTemplate(key, value, false)
         } else if(value instanceof List){
-            log.debug("List: " + value)
+            //log.debug("List: " + value)
             value.each {listVal -> parseTemplate(listVal, key, true)}
         }
     }
@@ -85,7 +85,7 @@ class MappingFileParser {
         String finalDestPathDirPath = finalDestPath.substring(0, finalDestPath.lastIndexOf("/"));
         File finalDestPathDirPathDir = new File(finalDestPathDirPath)
 
-        log.debug("template file: " + templateFile)
+        //log.debug("template file: " + templateFile)
 
         if (!finalDestPathDirPathDir.exists()) {
             finalDestPathDirPathDir.mkdirs();
@@ -112,7 +112,7 @@ class MappingFileParser {
         }
         String templateText = templateEngine.createTemplate(templateFile.getText()).make(envMap);
 
-        log.debug("template text: " + templateText)
+        //log.debug("template text: " + templateText)
 
         destFile.append(templateText)
     }

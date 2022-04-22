@@ -40,7 +40,7 @@ public class ConfigTemplateMojo extends AbstractMojo {
 
         getLog().info("Env = " + env);
 
-        getLog().info("Parsing mapping");
+        getLog().debug("Parsing mapping");
         if(mappingYamls.size() == 0) {
             throw new IllegalStateException("No mapping yaml file found");
         } else if(mappingYamls.size() > 1) {
@@ -75,7 +75,7 @@ public class ConfigTemplateMojo extends AbstractMojo {
             defaultYamlFile = defaultYamlFiles.get(0);
         }
 
-        getLog().info("Completed data yamls");
+        getLog().debug("Completed data yamls");
 
         envYamlFile = envYamlFiles.get(0);
 
